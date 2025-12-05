@@ -1,19 +1,18 @@
-# 📊 MDRRMO DREAMS: Disaster Response and Emergency Aid Management System
+# 📊 MDRRMO DREAMS: Disaster Response and Emergency Aid Management System (Core Operations Focus)
 
 ## Project Overview
 
-**MDRRMO DREAMS** is a Database Management System developed for the Municipal Disaster Risk Reduction and Management Office (MDRRMO). This system centralizes and manages critical operational data derived from the official Citizen's Charter, ensuring efficiency in preparedness, response, and resource accountability.
+**MDRRMO DREAMS** is a **focused** Database Management System for the Municipal Disaster Risk Reduction and Management Office (MDRRMO). The system is built on a highly interconnected 5-table schema designed to manage the critical operational pipeline: **Emergency Incidents, Personnel Deployment, and Resource Accountability.**
 
 ---
 
 ## 🎯 Key Focus Areas (Scope)
 
-The application provides full CRUD (Create, Read, Update, Delete) functionality across 4 core operational areas:
+The application provides full CRUD (Create, Read, Update, Delete) functionality across **3 core, highly-connected operational areas:**
 
-1.  **Emergency Response Logging:** Tracks all spontaneous 24/7 incidents (Medical, Road Accident) and the response status.
-2.  **Scheduled Service Management:** Manages pre-requested services from the community (e.g., Tree Trimming, Site Inspections).
-3.  **Resource and Equipment Inventory:** Monitors stock levels, categorization, and usage of all physical assets (vehicles, supplies, relief goods).
-4.  **Training Event Management:** Maintains comprehensive records of all DRRM training events and attendee participation.
+1.  **Emergency Response Logging:** Tracks all spontaneous 24/7 incidents and the designated Incident Commander.
+2.  **Resource Inventory & Tracking:** Monitors stock levels of equipment and supplies, and tracks their consumption per incident using a bridge table (`ResourceUsage`).
+3.  **Personnel Management & Deployment:** Tracks staff details, specialties, and uses a bridge table (`Deployment`) to log which personnel were assigned to which incident.
 
 ---
 
@@ -22,19 +21,16 @@ The application provides full CRUD (Create, Read, Update, Delete) functionality 
 | Component | Technology | Version / Notes |
 | :--- | :--- | :--- |
 | **Database Management System** | **MySQL / MariaDB** | Executed via XAMPP |
-| **Backend / Application Logic** | **Python** | Python 3.x |
+| **Backend / Application Logic** | **Python** | Python 3.13.3 |
 | **Graphical User Interface (GUI)** | **Tkinter** | Standard Python library |
-| **Code Editor** | **VS Code** | Used for development and Git integration |
 
 ---
 
 ## 📁 Repository Structure
 
-The project is organized into the following directories:
-
 * **`CODE/`**: Contains all Python source files (`.py`) for the GUI, database connection, and application logic.
 * **`DATABASE/`**: Stores all SQL scripts for schema creation and sample data population.
-* **`DOCUMENTATION/`**: Contains planning documents, including the official project proposal and user manuals.
+* **`DOCUMENTATION/`**: Contains planning documents, including the official project proposal.
 * **`REPORTS/`**: Holds final deliverables, including the ERD image and the final academic report.
 
 ---
@@ -43,35 +39,15 @@ The project is organized into the following directories:
 
 ### 1. Database Setup
 
-To run the application, you must first deploy the database using XAMPP:
-
-1.  Start the **Apache** and **MySQL** services in your XAMPP Control Panel.
+1.  Start the **Apache** and **MySQL** services in XAMPP.
 2.  Open **phpMyAdmin** in your browser.
 3.  **Import** the following scripts in order to create and populate the database:
-    * `DATABASE/01_schema_creation.sql`
-    * `DATABASE/02_sample_data.sql`
+    * `DATABASE/01_schema_creation.sql` (Creates the 5-table structure)
+    * `DATABASE/02_sample_data.sql` (Populates the tables with test data)
 
 ### 2. Application Setup
 
-1.  (Optional but Recommended) Create a virtual environment: `python -m venv venv`
-2.  Activate the environment.
-3.  Install necessary Python database connectors (e.g., `pip install mysql-connector-python`).
-4.  Run the main application file: `python CODE/main_app.py`
+1.  Install necessary Python database connectors (e.g., `pip install mysql-connector-python`).
+2.  Run the main application file: `python CODE/main_app.py`
 
 ---
-
-## 🔑 Database Schema Reference
-
-The system utilizes 8 normalized tables with clear relationships (see the `DATABASE/01_schema_creation.sql` file for full details):
-
-1.  `Personnel`
-2.  `ServiceType`
-3.  `ServiceRequests`
-4.  `ResponseIncidents`
-5.  `Resources`
-6.  `ResourceUsage` (Bridge Table)
-7.  `TrainingEvents`
-8.  `Attendees`
-
----
-***
