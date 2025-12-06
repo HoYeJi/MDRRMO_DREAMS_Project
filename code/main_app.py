@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from db_connector import create_connection, close_connection
 from personnel_module import PersonnelModule
+from incident_module import IncidentModule
+from resource_module import ResourceModule
+from report_module import ReportModule
 
 class DreamsApp(tk.Tk):
     def __init__(self):
@@ -22,6 +25,18 @@ class DreamsApp(tk.Tk):
         """Opens the Personnel Management window."""
         PersonnelModule(self.conn, self)
 
+    def open_incident_module(self):
+        """Opens the Incident Management window."""
+        IncidentModule(self.conn, self)
+
+    def open_resource_module(self):
+        """Opens the Resource Management window."""
+        ResourceModule(self.conn, self)
+
+    def open_report_module(self):
+        """Opens the Resource Management window."""
+        ReportModule(self.conn, self)
+
     def create_widgets(self):
         # Placeholder for the main navigation area
         title_label = tk.Label(self, text="MDRRMO DREAMS", font=("Arial", 16))
@@ -32,16 +47,16 @@ class DreamsApp(tk.Tk):
         nav_frame.pack(pady=10)
 
         # 1. Personnel Management
-        tk.Button(nav_frame, text="Personnel Management", width=25,command=self.open_personnel_module).pack(pady=5)
+        tk.Button(nav_frame, text="Personnel Management", width=25, command=self.open_personnel_module).pack(pady=5)
 
         # 2. Incident & Deployment Management
-        tk.Button(nav_frame, text="Incident & Deployment", width=25).pack(pady=5)
+        tk.Button(nav_frame, text="Incident & Deployment", width=25, command=self.open_incident_module).pack(pady=5)
 
         # 3. Resources & Inventory
-        tk.Button(nav_frame, text="Resources & Inventory", width=25).pack(pady=5)
+        tk.Button(nav_frame, text="Resources & Inventory", width=25, command=self.open_resource_module).pack(pady=5)
 
         # 4. Reports Module (Queries)
-        tk.Button(nav_frame, text="Generate Reports", width=25).pack(pady=15)
+        tk.Button(nav_frame, text="Generate Reports", width=25, command=self.open_report_module).pack(pady=15)
 
     def on_closing(self):
         """Cleanly closes the DB connection when the app is shut down."""
