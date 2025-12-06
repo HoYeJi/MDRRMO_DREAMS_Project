@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from db_connector import create_connection, close_connection
+from personnel_module import PersonnelModule
 
 class DreamsApp(tk.Tk):
     def __init__(self):
@@ -17,6 +18,10 @@ class DreamsApp(tk.Tk):
 
         self.create_widgets()
 
+    def open_personnel_module(self):
+        """Opens the Personnel Management window."""
+        PersonnelModule(self.conn, self)
+
     def create_widgets(self):
         # Placeholder for the main navigation area
         title_label = tk.Label(self, text="MDRRMO DREAMS", font=("Arial", 16))
@@ -27,7 +32,7 @@ class DreamsApp(tk.Tk):
         nav_frame.pack(pady=10)
 
         # 1. Personnel Management
-        tk.Button(nav_frame, text="Personnel Management", width=25).pack(pady=5)
+        tk.Button(nav_frame, text="Personnel Management", width=25,command=self.open_personnel_module).pack(pady=5)
 
         # 2. Incident & Deployment Management
         tk.Button(nav_frame, text="Incident & Deployment", width=25).pack(pady=5)
