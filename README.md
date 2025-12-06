@@ -1,53 +1,107 @@
 # 📊 MDRRMO DREAMS: Disaster Response and Emergency Aid Management System (Core Operations Focus)
 
-## Project Overview
+## 1. Project Overview & Objectives (Deliverables 3.1.1, 3.1.2)
 
-**MDRRMO DREAMS** is a **focused** Database Management System for the Municipal Disaster Risk Reduction and Management Office (MDRRMO). The system is built on a highly interconnected 5-table schema designed to manage the critical operational pipeline: **Emergency Incidents, Personnel Deployment, and Resource Accountability.**
+The **MDRRMO DREAMS** (Disaster Response and Emergency Aid Management System) is a comprehensive database application designed for a Municipal Disaster Risk Reduction and Management Office. Its purpose is to streamline core emergency operations, deployment logistics, and inventory tracking.
 
----
+This project was developed to meet the following objectives of the IT 211 course:
 
-## 🎯 Key Focus Areas (Scope)
+* **Demonstrate understanding of database concepts and design.** (1.1)
+* **Apply knowledge of SQL, CRUD operations, and relational databases.** (1.2)
+* **Develop a functional system with a user-friendly interface** to manage personnel, incidents, and resources. (1.3, 2.3)
+* **Generate complex reports and queries** to retrieve meaningful analytical data on disaster response performance and resource consumption. (2.5)
 
-The application provides full CRUD (Create, Read, Update, Delete) functionality across **3 core, highly-connected operational areas:**
+***
 
-1.  **Emergency Response Logging:** Tracks all spontaneous 24/7 incidents and the designated Incident Commander.
-2.  **Resource Inventory & Tracking:** Monitors stock levels of equipment and supplies, and tracks their consumption per incident using a bridge table (`ResourceUsage`).
-3.  **Personnel Management & Deployment:** Tracks staff details, specialties, and uses a bridge table (`Deployment`) to log which personnel were assigned to which incident.
+## 2. Project Scope & Architecture (Deliverables 3.1.3, 3.4.2)
 
----
+### 🛠️ Tools and Technologies
 
-## 🛠️ Technology Stack
-
-| Component | Technology | Version / Notes |
+| Component | Technology | Role |
 | :--- | :--- | :--- |
-| **Database Management System** | **MySQL / MariaDB** | Executed via XAMPP |
-| **Backend / Application Logic** | **Python** | Python 3.13.3 |
-| **Graphical User Interface (GUI)** | **Tkinter** | Standard Python library |
+| **Database** | **MySQL (via XAMPP)** | Stores all operational and inventory data. |
+| **Database Connector** | **`mysql-connector-python`** | Facilitates communication between Python and MySQL. |
+| **Application GUI** | **Python (Tkinter)** | Provides the user interface for data interaction and management. |
+| **Language** | **SQL, Python** | Used for data definition/manipulation and application logic. |
 
----
+### 🚀 System Architecture
 
-## 📁 Repository Structure
+The system utilizes a **Two-Tier Architecture**: the **Python/Tkinter GUI client** connects directly to the local **MySQL server** (hosted on XAMPP). This connection is managed through the central `db_connector.py` module. 
 
-* **`CODE/`**: Contains all Python source files (`.py`) for the GUI, database connection, and application logic.
-* **`DATABASE/`**: Stores all SQL scripts for schema creation and sample data population.
-* **`DOCUMENTATION/`**: Contains planning documents, including the official project proposal.
-* **`REPORTS/`**: Holds final deliverables, including the ERD image and the final academic report.
+***
 
----
+## 3. Database Design and Implementation (Deliverables 3.2, 3.4.1)
 
-## ⚙️ Setup and Execution Guide
+The system is built upon a **5-table, highly normalized relational schema** focused on operational integrity and minimal redundancy (3.2.3).
 
-### 1. Database Setup
+### 📊 Schema and Relationships (3.2.2)
 
-1.  Start the **Apache** and **MySQL** services in XAMPP.
-2.  Open **phpMyAdmin** in your browser.
-3.  **Import** the following scripts in order to create and populate the database:
-    * `DATABASE/01_schema_creation.sql` (Creates the 5-table structure)
-    * `DATABASE/02_sample_data.sql` (Populates the tables with test data)
+The database, named `MDRRMO_DREAMS_DB`, consists of three core entity tables and two many-to-many (M:M) bridge tables:
 
-### 2. Application Setup
+| Table Name | Purpose | Key Relationships |
+| :--- | :--- | :--- |
+| **`Personnel`** | Master list of all MDRRMO staff and responders. | One-to-Many (`1:M`) to `ResponseIncidents` (Commander). |
+| **`Resources`** | Master inventory list of all equipment and supplies. | One-to-Many (`1:M`) to `ResourceUsage`. |
+| **`ResponseIncidents`** | Logs of all emergency events. | One-to-Many (`1:M`) to `Deployment` and `ResourceUsage`. |
+| **`Deployment`** | **M:M Bridge** linking `Personnel` to `ResponseIncidents`. | Tracks which specific personnel were deployed to which incident. |
+| **`ResourceUsage`** | **M:M Bridge** linking `Resources` to `ResponseIncidents`. | Tracks the quantity of resources consumed during an incident. |
 
-1.  Install necessary Python database connectors (e.g., `pip install mysql-connector-python`).
-2.  Run the main application file: `python CODE/main_app.py`
+### 📁 Database Scripts
 
----
+The entire database can be deployed using the following scripts located in the `DATABASE/` folder:
+
+1.  `01_schema_creation.sql`: Creates the `MDRRMO_DREAMS_DB` and all 5 tables with primary and foreign keys.
+2.  `02_sample_data.sql`: Populates the tables with interconnected sample records for testing.
+3.  `03_reporting_queries.sql`: Contains the 5 complex SQL joins used by the Reporting Module.
+
+***
+
+## 4. Application Functionality (Deliverables 3.3, 3.4.3)
+
+The Python application is split into four main modules, all implementing **CRUD operations** (2.4) and following **user-centered design principles** (2.6).
+
+### 1. Personnel Management
+* **CRUD:** Full functionality for adding, editing, viewing, and deleting staff records.
+
+### 2. Incident & Deployment Management
+* **CRUD:** Allows logging new incidents and updating status/details.
+* **Interconnectivity:** Uses a dropdown list populated by the **`Personnel`** table to assign an Incident Commander (`commander_id`).
+
+### 3. Resources & Inventory
+* **Resources CRUD:** Manages the master inventory list (item details, categories, units).
+* **Usage Logic (Bridge Table):** Allows logging resource consumption against an **Incident**. This operation automatically **updates (decrements)** the `stock_level` in the **`Resources`** table, demonstrating functional data integrity.
+
+### 4. Reporting & Analytics (2.5)
+The Reports Module displays results from **5 complex analytical queries** using the Treeview widget across dedicated tabs:
+1.  **Incident Performance:** Shows the Commander and total number of personnel deployed per incident.
+2.  **Personnel Utilization:** Logs all personnel deployments, their specialty, and their role on site.
+3.  **Resource Consumption Detail:** Lists the exact quantity of items consumed per incident.
+4.  **Low-Stock Inventory Alert:** Filters for resources with stock levels $\le 5$.
+5.  **Incidents Lacking Resource Logs:** Identifies potential auditing gaps.
+
+***
+
+## 5. Setup and Execution Guide (Deliverable 3.5.1)
+
+### Prerequisites
+
+1.  **XAMPP:** Must be installed and running (Apache and MySQL services started).
+2.  **Python 3.13.3:** Must be installed.
+3.  **Dependencies:** Install the MySQL connector: `pip install mysql-connector-python`
+
+### Database Setup
+
+1.  Open **phpMyAdmin** (`http://localhost/phpmyadmin`).
+2.  Import the **`DATABASE/01_schema_creation.sql`** script to create the database structure.
+3.  Select the `MDRRMO_DREAMS_DB` and import the **`DATABASE/02_sample_data.sql`** script to populate the tables.
+
+### Application Launch
+
+1.  Ensure **XAMPP MySQL is running**.
+2.  Open your terminal in the project's root directory.
+3.  Run the main application file:
+    ```bash
+    python CODE/main_app.py
+    ```
+
+The application will launch, connect to the database, and is ready for use.
