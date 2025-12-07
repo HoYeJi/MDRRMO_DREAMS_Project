@@ -239,14 +239,16 @@ class PersonnelModule(tk.Toplevel):
                 cursor.close()
 
     def clear_form(self, keep_id=False):
-        """Resets all form entries and button states."""
         self.name_entry.delete(0, tk.END)
         self.role_entry.delete(0, tk.END)
         self.specialty_entry.delete(0, tk.END)
         self.contact_entry.delete(0, tk.END)
         self.unit_entry.delete(0, tk.END)
-        self.update_btn.config(state=tk.DISABLED)
-        self.tree.selection_remove(self.tree.selection())
+
+        if not keep_id:
+            self.personnel_id_var.set("")
+            self.update_btn.config(state=tk.DISABLED)
+            self.tree.selection_remove(self.tree.selection())
 
     def on_close(self):
         """Handles closing the Toplevel window."""

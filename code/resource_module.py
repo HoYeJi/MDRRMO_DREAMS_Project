@@ -335,8 +335,11 @@ class ResourceModule(tk.Toplevel):
         self.category_entry.delete(0, tk.END)
         self.stock_entry.delete(0, tk.END)
         self.unit_entry.delete(0, tk.END)
-        self.update_master_btn.config(state=tk.DISABLED)
-        self.master_tree.selection_remove(self.master_tree.selection())
+        
+        if not keep_id:
+            self.resource_id_var.set("")
+            self.update_master_btn.config(state=tk.DISABLED)
+            self.master_tree.selection_remove(self.master_tree.selection())
 
 
     # --- Usage Log Function ---

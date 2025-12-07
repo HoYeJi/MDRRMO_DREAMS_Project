@@ -199,7 +199,7 @@ class IncidentModule(tk.Toplevel):
         if selected_item:
             values = self.tree.item(selected_item, 'values')
             
-            self.clear_form() 
+            self.clear_form(keep_selection=True) 
             
             # Use incident ID for hidden tracking
             self.incident_id_var.set(values[0])
@@ -280,18 +280,23 @@ class IncidentModule(tk.Toplevel):
             finally:
                 cursor.close()
 
-    def clear_form(self):
+    def clear_form(self, keep_selection=False):
         """Resets all form entries and button states."""
         self.type_entry.delete(0, tk.END)
         self.location_entry.delete(0, tk.END)
         self.date_entry.delete(0, tk.END)
-        self.incident_id_var.set("")
-        self.update_btn.config(state=tk.DISABLED)
-        # Reset dropdown to the default/first option
-        if self.personnel_map:
+
+        if not keep_selection:
+            self.incident_id_var.set("")
+            self.update_btn.config(state=tk.DISABLED)
+        
+        if self.personnel_map and not keep_selection:
             self.commander_var.set(sorted(self.personnel_map.keys())[0])
-        self.status_var.set("Active")
-        self.tree.selection_remove(self.tree.selection())
+        if not keep_selection:
+            self.status_var.set("Active")
+
+        if not keep_selection:
+            self.tree.selection_remove(self.tree.selection())
 
     def on_close(self):
         """Handles closing the Toplevel window."""
